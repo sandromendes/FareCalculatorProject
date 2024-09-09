@@ -21,17 +21,16 @@ namespace FareCalculator.App.ViewModels
             _fareCalculatorService = fareCalculatorService;
             _distanceCalculatorService = distanceCalculatorService;
 
-            LoadUberTypes();
+            LoadUberOptions();
+            LoadCityOptions();
 
             CalculateFareCommand = new DelegateCommand(ExecuteCalculateFare);
         }
 
-        public void LoadUberTypes()
-        {
-            UberTypes = Enum.GetNames(typeof(UberType)).ToList();
-        }
+        public void LoadUberOptions() => UberOptions = Enum.GetNames(typeof(UberType)).ToList();
+        public void LoadCityOptions() => CityOptions = Enum.GetNames(typeof(CityTypes)).ToList();
 
-        public List<string> UberTypes { get; set; }
+        public List<string> UberOptions { get; set; }
 
         private string _selectedUberType;
         public string SelectedUberOption
@@ -44,19 +43,21 @@ namespace FareCalculator.App.ViewModels
                 OnPropertyChanged(nameof(IsPassengerTypeVisible));
             }
         }
-
-        private string _origin;
-        public string Origin
+        
+        public List<string> CityOptions { get; set; }
+        
+        private string _selectedOrigin;
+        public string SelectedOrigin
         {
-            get => _origin;
-            set => SetProperty(ref _origin, value);
+            get => _selectedOrigin;
+            set => SetProperty(ref _selectedOrigin, value);
         }
 
-        private string _destination;
-        public string Destination
+        private string _selectedDestination;
+        public string SelectedDestination
         {
-            get => _destination;
-            set => SetProperty(ref _destination, value);
+            get => _selectedDestination;
+            set => SetProperty(ref _selectedDestination, value);
         }
 
         private int _distance;
@@ -138,7 +139,10 @@ namespace FareCalculator.App.ViewModels
         {
             try
             {
-                Distance = await _distanceCalculatorService.CalculateDistanceAsync(Origin, Destination);
+                Enum.TryParse(SelectedOrigin, out CityTypes selectedOrigin);
+                Enum.TryParse(SelectedDestination, out CityTypes selectedDestination);
+
+                Distance = await _distanceCalculatorService.CalculateDistanceAsync(selectedOrigin, selectedDestination);
 
                 Enum.TryParse(SelectedUberOption, out UberType selectedType);
 

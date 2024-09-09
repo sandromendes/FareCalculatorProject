@@ -1,6 +1,6 @@
 # FareCalculatorApp
 
-Este projeto é um exemplo de aplicação UWP (Universal Windows Platform) utilizando a arquitetura MVVM e o framework Prism para calcular tarifas de diferentes tipos de serviços Uber, como Uber X, VIP, Black, Uber Moto, e serviços de entrega como Uber Flash e Flash Moto. O projeto também inclui o cálculo de distância(random) e tarifas baseadas em peso e dimensões para serviços de entrega.
+Este projeto é um exemplo de aplicação UWP (Universal Windows Platform) utilizando a arquitetura MVVM e o framework Prism para calcular tarifas de diferentes tipos de serviços Uber, como Uber X, VIP, Black, Uber Moto, e serviços de entrega como Uber Flash e Flash Moto. O projeto também inclui o cálculo de distância entre as cidades da Região Metropolitana do Recife e tarifas baseadas em peso e dimensões da encomenda para serviços de entrega.
 
 ## Funcionalidades
 

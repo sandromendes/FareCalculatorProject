@@ -1,0 +1,85 @@
+# Build files
+bin/
+obj/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider/JetBrains
+.idea/
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/libraries
+.idea/**/shelf
+.idea/**/workspace.xml
+.idea/**/description.html
+.idea/**/encodings.xml
+.idea/**/vcs.xml
+.idea/**/modules.xml
+.idea/.idea/
+
+# Visual Studio
+.vs/
+
+# Visual Studio Code
+.vscode/
+
+# Packages
+*.nupkg
+*.snupkg
+**/packages/*
+!**/packages/build/
+!**/packages/repositories.config
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Logs
+*.log
+
+# Compiled Dynamic Link Libraries (DLLs)
+*.dll
+
+# Compiled C++ object files
+*.obj
+*.o
+
+# Temporary files
+*.tmp
+*.temp
+
+# XML document transform file
+*.config
+
+# NuGet Packages
+*.nupkg
+.nuget/
+project.lock.json
+project.fragment.lock.json
+
+# Other user-specific files
+*.rsuser
+*.suo
+*.user
+*.userprefs
+
+# Web files
+node_modules/
+bower_components/
+
+# Entity Framework
+Migrations/
+
+# Prism-related files
+Generated/

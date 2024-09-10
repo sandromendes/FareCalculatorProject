@@ -1,5 +1,4 @@
-﻿using FareCalculator.Core.Enums;
-using FareCalculator.Core.Models;
+﻿using FareCalculator.Core.Models;
 using FareCalculator.Core.Services.Interfaces;
 using System;
 
@@ -20,63 +19,88 @@ namespace FareCalculator.Core.Services
 
             decimal fare;
 
-            if (vehicle.Type == UberType.UberX)
+            switch (vehicle)
             {
-                if (vehicle.Passengers == 0)
-                    fare = 5.00m + 0.50m * distance;
-                else if (vehicle.Passengers == 1)
-                    fare = 5.00m + 1.00m * distance;
-                else if (vehicle.Passengers == 2)
-                    fare = 5.00m - 0.50m + 1.00m * distance;
-                else
-                    fare = 5.00m - 1.00m + 1.00m * distance;
-            }
-            else if (vehicle.Type == UberType.UberVIP)
-            {
-                if (vehicle.Passengers == 0)
-                    fare = 10.00m + 0.75m * distance;
-                else if (vehicle.Passengers == 1)
-                    fare = 10.00m + 1.50m * distance;
-                else if (vehicle.Passengers == 2)
-                    fare = 10.00m - 0.50m + 1.50m * distance;
-                else
-                    fare = 10.00m - 1.00m + 1.50m * distance;
-            }
-            else if (vehicle.Type == UberType.UberBlack)
-            {
-                if (vehicle.Passengers == 0)
-                    fare = 15.00m + 1.00m * distance;
-                else if (vehicle.Passengers == 1)
-                    fare = 15.00m + 2.00m * distance;
-                else if (vehicle.Passengers == 2)
-                    fare = 15.00m - 1.00m + 2.00m * distance;
-                else
-                    fare = 15.00m - 2.00m + 2.00m * distance;
-            }
-            else if (vehicle.Type == UberType.UberMoto)
-            {
-                fare = 3.00m + 0.50m * distance;
-            }
-            else if (vehicle.Type == UberType.Flash)
-            {
-                if (weight > 10)
-                    fare = 4.00m + 1.00m * distance;
-                else
-                    fare = 4.00m + 0.50m * distance;
-            }
-            else if (vehicle.Type == UberType.FlashMoto)
-            {
-                if (weight > 20 || dimension > 1)
-                    fare = 8.00m + 1.50m * distance;
-                else
-                    fare = 8.00m + 1.00m * distance;
-            }
-            else
-            {
-                throw new ArgumentException("Not a known vehicle type", nameof(vehicle));
+                case UberX uberX:
+                    fare = CalculateUberXFare(uberX, distance);
+                    break;
+
+                case UberVip uberVIP:
+                    fare = CalculateUberVIPFare(uberVIP, distance);
+                    break;
+
+                case UberBlack uberBlack:
+                    fare = CalculateUberBlackFare(uberBlack, distance);
+                    break;
+
+                case UberMoto uberMoto:
+                    fare = CalculateUberMotoFare(uberMoto, distance);
+                    break;
+
+                case FlashMoto flashMoto:
+                    fare = CalculateFlashMotoFare(flashMoto, distance, weight);
+                    break;
+
+                case UberFlash uberFlash:
+                    fare = CalculateUberFlashFare(uberFlash, distance, weight, dimension);
+                    break;
+
+                default:
+                    throw new ArgumentException("Not a known vehicle type", nameof(vehicle));
             }
 
             return fare;
+        }
+
+        private decimal CalculateUberXFare(UberX uberX, int distance)
+        {
+            decimal fare = uberX.BaseFare + uberX.RatePerKm * distance;
+
+            if (uberX.Passengers == 1)
+                return fare;
+            else if (uberX.Passengers == 2)
+                return fare - 0.50m;
+            else
+                return fare - 1.00m;
+        }
+
+        private decimal CalculateUberVIPFare(UberVip uberVIP, int distance)
+        {
+            decimal fare = uberVIP.BaseFare + uberVIP.RatePerKm * distance;
+
+            if (uberVIP.Passengers == 1)
+                return fare;
+            else if (uberVIP.Passengers == 2)
+                return fare - 0.50m;
+            else
+                return fare - 1.00m;
+        }
+
+        private decimal CalculateUberBlackFare(UberBlack uberBlack, int distance)
+        {
+            decimal fare = uberBlack.BaseFare + uberBlack.RatePerKm * distance;
+
+            if (uberBlack.Passengers == 1)
+                return fare;
+            else if (uberBlack.Passengers == 2)
+                return fare - 1.00m;
+            else
+                return fare - 2.00m;
+        }
+
+        private decimal CalculateUberMotoFare(UberMoto uberMoto, int distance)
+        {
+            return uberMoto.BaseFare + uberMoto.RatePerKm * distance;
+        }
+
+        private decimal CalculateFlashMotoFare(FlashMoto flashMoto, int distance, decimal weight)
+        {
+            return weight > 20 ? flashMoto.BaseFare + 1.50m * distance : flashMoto.BaseFare + 1.00m * distance;
+        }
+
+        private decimal CalculateUberFlashFare(UberFlash uberFlash, int distance, decimal weight, decimal dimension)
+        {
+            return weight > 10 || dimension > 1 ? uberFlash.BaseFare + 1.50m * distance : uberFlash.BaseFare + 1.00m * distance;
         }
     }
 }

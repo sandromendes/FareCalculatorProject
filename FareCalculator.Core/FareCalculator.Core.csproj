@@ -122,6 +122,12 @@
   <ItemGroup>
     <Compile Include="Enums\CityTypes.cs" />
     <Compile Include="Enums\UberType.cs" />
+    <Compile Include="Models\FlashMoto.cs" />
+    <Compile Include="Models\UberBlack.cs" />
+    <Compile Include="Models\UberFlash.cs" />
+    <Compile Include="Models\UberMoto.cs" />
+    <Compile Include="Models\UberVip.cs" />
+    <Compile Include="Models\UberX.cs" />
     <Compile Include="Models\Vehicle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DistanceCalculatorService.cs" />

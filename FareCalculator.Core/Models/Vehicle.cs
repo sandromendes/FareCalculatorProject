@@ -2,12 +2,18 @@
 
 namespace FareCalculator.Core.Models
 {
-    public class Vehicle
+    public abstract class Vehicle
     {
-        public UberType Type { get; set; }
-        public int Passengers { get; set; } = 0;
-        public decimal Weight { get; set; } = 0;
-        public decimal Dimension { get; set; } = 0;
-        public int Distance { get; set; } = 0;
+        public abstract decimal BaseFare { get; }
+        public abstract decimal RatePerKm { get; }
     }
+
+    public abstract class PassengerCar : Vehicle
+    {
+        public abstract int Passengers { get; set; }
+    }
+
+    public abstract class Car : Vehicle { }
+
+    public abstract class Motorcycle : Vehicle { }
 }

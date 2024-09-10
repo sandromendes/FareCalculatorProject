@@ -1,5 +1,4 @@
-﻿using FareCalculator.Core.Enums;
-using FareCalculator.Core.Models;
+﻿using FareCalculator.Core.Models;
 using FareCalculator.Core.Services;
 using FareCalculator.Core.Services.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -11,6 +10,7 @@ namespace FareCalculator.Tests
     public class FareCalculatorServiceTests
     {
         private IFareCalculatorService _fareCalculatorService;
+        
 
         [TestInitialize]
         public void SetUp()
@@ -26,21 +26,21 @@ namespace FareCalculator.Tests
         }
 
         [TestMethod]
-        public void CalculateFare_UberX_NoPassengers_ReturnsExpectedFare()
+        public void CalculateFare_UberX_OnePassenger_ReturnsExpectedFare()
         {
-            var vehicle = new Vehicle { Type = UberType.UberX, Passengers = 0 };
+            var vehicle = new UberX { Passengers = 1 };
             var fare = _fareCalculatorService.CalculateFare(vehicle, 10);
 
             Assert.AreEqual(5.00m + 0.50m * 10, fare);
         }
 
         [TestMethod]
-        public void CalculateFare_UberX_OnePassenger_ReturnsExpectedFare()
+        public void CalculateFare_UberX_TwoPassenger_ReturnsExpectedFare()
         {
-            var vehicle = new Vehicle { Type = UberType.UberX, Passengers = 1 };
+            var vehicle = new UberX { Passengers = 2 };
             var fare = _fareCalculatorService.CalculateFare(vehicle, 10);
 
-            Assert.AreEqual(5.00m + 1.00m * 10, fare);
+            Assert.AreEqual((5.00m + 0.50m * 10) - 0.50m, fare);
         }
     }
 }

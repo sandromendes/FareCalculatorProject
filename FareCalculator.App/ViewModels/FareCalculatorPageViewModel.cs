@@ -146,11 +146,8 @@ namespace FareCalculator.App.ViewModels
 
                 Enum.TryParse(SelectedUberOption, out UberType selectedType);
 
-                var fare = _fareCalculatorService.CalculateFare(new Vehicle
-                {
-                    Type = selectedType,
-                    Passengers = IsPassengerTypeVisible ? 1 : 0 
-                }, Distance, Weight, Height * Width * Length); 
+                var fare = _fareCalculatorService
+                    .CalculateFare(CreateVehicle(selectedType), Distance, Weight, Height * Width * Length); 
 
                 FareResult = $"Calculated Fare: {fare:C}";
                 DistanceResult = $"Calculated Distance: {Distance} km";
@@ -158,6 +155,27 @@ namespace FareCalculator.App.ViewModels
             catch (Exception ex)
             {
                 FareResult = $"Error calculating fare: {ex.Message}";
+            }
+        }
+
+        private Vehicle CreateVehicle(UberType type)
+        {
+            switch (type)
+            {
+                case UberType.UberX:
+                    return new UberX { Passengers = IsPassengerTypeVisible ? 1 : 0 };
+                case UberType.UberVIP:
+                    return new UberVip { Passengers = IsPassengerTypeVisible ? 1 : 0 };
+                case UberType.UberBlack:
+                    return new UberBlack { Passengers = IsPassengerTypeVisible ? 1 : 0 };
+                case UberType.UberMoto:
+                    return new UberMoto();
+                case UberType.Flash:
+                    return new FlashMoto { Weight = Weight };
+                case UberType.FlashMoto:
+                    return new UberFlash { Dimension = Height * Width * Length };
+                default:
+                    throw new ArgumentException("Invalid UberType", nameof(type));
             }
         }
     }

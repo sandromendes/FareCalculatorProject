@@ -125,3 +125,40 @@
 - **Então** a tarifa total deve ser R$ 45,00
 
 ---
+
+### Exemplo 1: Cálculo de tarifa para UberX
+
+Tipo de veículo: UberX
+Passageiros: 2
+Distância: 15 km
+
+**Fórmula:**
+A tarifa base para o UberX é de 5,00 e a taxa por quilômetro é de 1,00. No caso de 2 passageiros, subtrai-se 0,50 da tarifa base.
+
+**Cálculo:**
+- Tarifa = Tarifa Base - 0,50 + (Custo por KM * Distância)
+- Tarifa = 5.00 - 0.50 + (1.00 * 15)
+- Tarifa = 4.50 + 15.00
+- Tarifa = 19.50
+
+Resultado: A tarifa para o UberX com 2 passageiros e 15 km de distância é 19,50.
+
+### Exemplo 2: Cálculo de tarifa para FlashMoto
+
+Tipo de veículo: FlashMoto
+Peso: 15 kg
+Distância: 8 km
+
+**Fórmula:**
+A tarifa base para o FlashMoto é de 4,00. Para pesos maiores que 10 kg, a taxa por quilômetro é 1,00.
+
+Tarifa = Tarifa Base + (Custo por KM * Distância)
+
+**Cálculo:**
+- Tarifa = 4.00 + (1.00 * 8)
+- Tarifa = 4.00 + 8.00
+- Tarifa = 12.00
+
+Resultado: A tarifa para o FlashMoto com 15 kg de peso e 8 km de distância é 12,00.
+
+

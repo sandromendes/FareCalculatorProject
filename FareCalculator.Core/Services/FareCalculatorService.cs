@@ -1,13 +1,28 @@
-﻿using FareCalculator.Core.Models;
+﻿using FareCalculator.Core.Enums;
+using FareCalculator.Core.Models;
+using FareCalculator.Core.Services.FareCalculators;
+using FareCalculator.Core.Services.FareCalculators.Interfaces;
 using FareCalculator.Core.Services.Interfaces;
 using System;
+using System.Collections.Generic;
 
 namespace FareCalculator.Core.Services
 {
     public class FareCalculatorService : IFareCalculatorService
     {
+        private readonly Dictionary<Type, IFareCalculatorStrategy> _strategies;
+
         public FareCalculatorService()
         {
+            _strategies = new Dictionary<Type, IFareCalculatorStrategy>
+            {
+                { typeof(UberX), new UberXFareCalculatorStrategy() },
+                { typeof(UberVip), new UberVipFareCalculatorStrategy() },
+                { typeof(UberBlack), new UberBlackFareCalculatorStrategy() },
+                { typeof(UberMoto), new UberMotoFareCalculatorStrategy() },
+                { typeof(UberFlash), new UberFlashFareCalculatorStrategy() },
+                { typeof(UberFlashMoto), new UberFlashMotoFareCalculatorStrategy() }
+            };
         }
 
         public decimal CalculateFare(Vehicle vehicle, int distance, decimal weight = 0, decimal dimension = 0)
@@ -17,90 +32,12 @@ namespace FareCalculator.Core.Services
                 throw new ArgumentNullException(nameof(vehicle));
             }
 
-            decimal fare;
-
-            switch (vehicle)
+            if (_strategies.TryGetValue(vehicle.GetType(), out var strategy))
             {
-                case UberX uberX:
-                    fare = CalculateUberXFare(uberX, distance);
-                    break;
-
-                case UberVip uberVIP:
-                    fare = CalculateUberVIPFare(uberVIP, distance);
-                    break;
-
-                case UberBlack uberBlack:
-                    fare = CalculateUberBlackFare(uberBlack, distance);
-                    break;
-
-                case UberMoto uberMoto:
-                    fare = CalculateUberMotoFare(uberMoto, distance);
-                    break;
-
-                case UberFlashMoto flashMoto:
-                    fare = CalculateUberFlashMotoFare(flashMoto, distance, weight);
-                    break;
-
-                case UberFlash uberFlash:
-                    fare = CalculateUberFlashFare(uberFlash, distance, weight, dimension);
-                    break;
-
-                default:
-                    throw new ArgumentException("Not a known vehicle type", nameof(vehicle));
+                return strategy.CalculateFare(vehicle, distance, weight, dimension);
             }
 
-            return fare;
-        }
-
-        private decimal CalculateUberXFare(UberX uberX, int distance)
-        {
-            decimal fare = uberX.BaseFare + uberX.RatePerKm * distance;
-
-            if (uberX.Passengers == 1)
-                return fare;
-            else if (uberX.Passengers == 2)
-                return fare - 0.50m;
-            else
-                return fare - 1.00m;
-        }
-
-        private decimal CalculateUberVIPFare(UberVip uberVIP, int distance)
-        {
-            decimal fare = uberVIP.BaseFare + uberVIP.RatePerKm * distance;
-
-            if (uberVIP.Passengers == 1)
-                return fare;
-            else if (uberVIP.Passengers == 2)
-                return fare - 0.50m;
-            else
-                return fare - 1.00m;
-        }
-
-        private decimal CalculateUberBlackFare(UberBlack uberBlack, int distance)
-        {
-            decimal fare = uberBlack.BaseFare + uberBlack.RatePerKm * distance;
-
-            if (uberBlack.Passengers == 1)
-                return fare;
-            else if (uberBlack.Passengers == 2)
-                return fare - 1.00m;
-            else
-                return fare - 2.00m;
-        }
-
-        private decimal CalculateUberMotoFare(UberMoto uberMoto, int distance)
-        {
-            return uberMoto.BaseFare + uberMoto.RatePerKm * distance;
-        }
-
-        private decimal CalculateUberFlashMotoFare(UberFlashMoto flashMoto, int distance, decimal weight)
-        {
-            return weight > 20 ? flashMoto.BaseFare + 1.50m * distance : flashMoto.BaseFare + 1.00m * distance;
-        }
-
-        private decimal CalculateUberFlashFare(UberFlash uberFlash, int distance, decimal weight, decimal dimension)
-        {
-            return weight > 10 || dimension > 1 ? uberFlash.BaseFare + 1.50m * distance : uberFlash.BaseFare + 1.00m * distance;
+            throw new ArgumentException("Invalid vehicle type.");
         }
     }
 }

@@ -132,6 +132,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DistanceCalculatorService.cs" />
     <Compile Include="Services\FareCalculatorService.cs" />
+    <Compile Include="Services\FareCalculators\Interfaces\IFareCalculatorStrategy.cs" />
+    <Compile Include="Services\FareCalculators\UberBlackFareCalculatorStrategy.cs" />
+    <Compile Include="Services\FareCalculators\UberFlashFareCalculatorStrategy.cs" />
+    <Compile Include="Services\FareCalculators\UberFlashMotoFareCalculatorStrategy.cs" />
+    <Compile Include="Services\FareCalculators\UberMotoFareCalculatorStrategy.cs" />
+    <Compile Include="Services\FareCalculators\UberVipFareCalculatorStrategy.cs" />
+    <Compile Include="Services\FareCalculators\UberXFareCalculatorStrategy.cs" />
     <Compile Include="Services\Interfaces\IDistanceCalculatorService.cs" />
     <Compile Include="Services\Interfaces\IFareCalculatorService.cs" />
     <EmbeddedResource Include="Properties\FareCalculator.Core.rd.xml" />

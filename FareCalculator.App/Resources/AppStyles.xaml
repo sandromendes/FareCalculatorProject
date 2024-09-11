@@ -33,4 +33,15 @@
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="CornerRadius" Value="5"/>
     </Style>
+
+    <Style x:Key="ClearButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="#FFCC0000"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="Padding" Value="10,5"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="CornerRadius" Value="5"/>
+    </Style>
 </ResourceDictionary>

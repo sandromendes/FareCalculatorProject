@@ -2,11 +2,11 @@
 {
     public enum UberType
     {
-        UberX,
-        UberVIP,
-        UberBlack,
-        UberMoto,
-        Flash,
-        FlashMoto
+        UBER_X,
+        UBER_VIP,
+        UBER_BLACK,
+        UBER_MOTO,
+        UBER_FLASH,
+        UBER_FLASH_MOTO
     }
 }

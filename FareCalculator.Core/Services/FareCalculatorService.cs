@@ -37,8 +37,8 @@ namespace FareCalculator.Core.Services
                     fare = CalculateUberMotoFare(uberMoto, distance);
                     break;
 
-                case FlashMoto flashMoto:
-                    fare = CalculateFlashMotoFare(flashMoto, distance, weight);
+                case UberFlashMoto flashMoto:
+                    fare = CalculateUberFlashMotoFare(flashMoto, distance, weight);
                     break;
 
                 case UberFlash uberFlash:
@@ -93,7 +93,7 @@ namespace FareCalculator.Core.Services
             return uberMoto.BaseFare + uberMoto.RatePerKm * distance;
         }
 
-        private decimal CalculateFlashMotoFare(FlashMoto flashMoto, int distance, decimal weight)
+        private decimal CalculateUberFlashMotoFare(UberFlashMoto flashMoto, int distance, decimal weight)
         {
             return weight > 20 ? flashMoto.BaseFare + 1.50m * distance : flashMoto.BaseFare + 1.00m * distance;
         }

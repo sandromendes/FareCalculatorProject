@@ -1,6 +1,6 @@
 ﻿namespace FareCalculator.Core.Models
 {
-    public class FlashMoto : Motorcycle
+    public class UberFlashMoto : Motorcycle
     {
         public decimal Weight { get; set; }
         public override decimal BaseFare => 4.00m;

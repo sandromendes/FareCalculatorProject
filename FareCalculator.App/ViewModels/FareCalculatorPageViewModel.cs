@@ -7,6 +7,8 @@ using FareCalculator.Core.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using Prism.Windows.Mvvm;
+using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls;
 
 namespace FareCalculator.App.ViewModels
 {
@@ -14,7 +16,10 @@ namespace FareCalculator.App.ViewModels
     {
         private readonly IFareCalculatorService _fareCalculatorService;
         private readonly IDistanceCalculatorService _distanceCalculatorService;
+
         public ICommand CalculateFareCommand { get; }
+        public ICommand ClearCommand { get; }
+
 
         public FareCalculatorPageViewModel(IFareCalculatorService fareCalculatorService, IDistanceCalculatorService distanceCalculatorService)
         {
@@ -24,7 +29,12 @@ namespace FareCalculator.App.ViewModels
             LoadUberOptions();
             LoadCityOptions();
 
+            SelectedUberOption = UberType.UBER_X.ToString();
+            SelectedOrigin = CityTypes.RECIFE.ToString();
+            SelectedDestination = CityTypes.OLINDA.ToString();
+
             CalculateFareCommand = new DelegateCommand(ExecuteCalculateFare);
+            ClearCommand = new DelegateCommand(ExecuteClear);
         }
 
         public void LoadUberOptions() => UberOptions = Enum.GetNames(typeof(UberType)).ToList();
@@ -39,8 +49,8 @@ namespace FareCalculator.App.ViewModels
             set
             {
                 SetProperty(ref _selectedUberType, value);
-                OnPropertyChanged(nameof(IsDeliveryTypeVisible));
-                OnPropertyChanged(nameof(IsPassengerTypeVisible));
+                RaisePropertyChanged(nameof(IsDeliveryTypeVisible));
+                RaisePropertyChanged(nameof(IsPassengerTypeVisible));
             }
         }
         
@@ -116,7 +126,7 @@ namespace FareCalculator.App.ViewModels
             {
                 if (Enum.TryParse(SelectedUberOption, out UberType selectedType))
                 {
-                    return selectedType == UberType.Flash || selectedType == UberType.FlashMoto;
+                    return selectedType == UberType.UBER_FLASH || selectedType == UberType.UBER_FLASH_MOTO;
                 }
                 return false;
             }
@@ -128,8 +138,8 @@ namespace FareCalculator.App.ViewModels
             {
                 if (Enum.TryParse(SelectedUberOption, out UberType selectedType))
                 {
-                    return selectedType == UberType.UberX || selectedType == UberType.UberVIP ||
-                           selectedType == UberType.UberBlack || selectedType == UberType.UberMoto;
+                    return selectedType == UberType.UBER_X || selectedType == UberType.UBER_VIP ||
+                           selectedType == UberType.UBER_BLACK || selectedType == UberType.UBER_MOTO;
                 }
                 return false;
             }
@@ -139,6 +149,12 @@ namespace FareCalculator.App.ViewModels
         {
             try
             {
+                if (IsDeliveryTypeVisible && (Weight <= 0 || Height <= 0 || Width <= 0 || Length <= 0))
+                {
+                    await ShowAlertDialog("There's at least one measure field with zero or empty.");
+                    return;
+                }
+
                 Enum.TryParse(SelectedOrigin, out CityTypes selectedOrigin);
                 Enum.TryParse(SelectedDestination, out CityTypes selectedDestination);
 
@@ -158,25 +174,51 @@ namespace FareCalculator.App.ViewModels
             }
         }
 
+        private void ExecuteClear()
+        {
+            SelectedUberOption = UberType.UBER_X.ToString();
+            SelectedOrigin = CityTypes.RECIFE.ToString();
+            SelectedDestination = CityTypes.OLINDA.ToString();
+            Weight = 0;
+            Height = 0;
+            Width = 0;
+            Length = 0;
+            FareResult = string.Empty;
+            DistanceResult = string.Empty;
+        }
+
         private Vehicle CreateVehicle(UberType type)
         {
             switch (type)
             {
-                case UberType.UberX:
+                case UberType.UBER_X:
                     return new UberX { Passengers = IsPassengerTypeVisible ? 1 : 0 };
-                case UberType.UberVIP:
+                case UberType.UBER_VIP:
                     return new UberVip { Passengers = IsPassengerTypeVisible ? 1 : 0 };
-                case UberType.UberBlack:
+                case UberType.UBER_BLACK:
                     return new UberBlack { Passengers = IsPassengerTypeVisible ? 1 : 0 };
-                case UberType.UberMoto:
+                case UberType.UBER_MOTO:
                     return new UberMoto();
-                case UberType.Flash:
-                    return new FlashMoto { Weight = Weight };
-                case UberType.FlashMoto:
+                case UberType.UBER_FLASH:
+                    return new UberFlashMoto { Weight = Weight };
+                case UberType.UBER_FLASH_MOTO:
                     return new UberFlash { Dimension = Height * Width * Length };
                 default:
                     throw new ArgumentException("Invalid UberType", nameof(type));
             }
         }
+
+        private async Task ShowAlertDialog(string message)
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Warning!",
+                Content = message,
+                CloseButtonText = "OK"
+            };
+
+            await dialog.ShowAsync();
+        }
+
     }
 }

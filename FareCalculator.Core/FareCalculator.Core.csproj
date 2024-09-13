@@ -120,6 +120,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Common\EnumExtensions.cs" />
     <Compile Include="Enums\CityTypes.cs" />
     <Compile Include="Enums\UberType.cs" />
     <Compile Include="Models\UberFlashMoto.cs" />

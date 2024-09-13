@@ -10,16 +10,16 @@ namespace FareCalculator.Core.Services
         {
         }
 
-        public decimal CalculateFare(Vehicle vehicle, int distance, decimal weight = 0, decimal dimension = 0)
+        public decimal CalculateFare(UberRideBase uberRide, int distance, decimal weight = 0, decimal dimension = 0)
         {
-            if (vehicle == null)
+            if (uberRide == null)
             {
-                throw new ArgumentNullException(nameof(vehicle));
+                throw new ArgumentNullException(nameof(uberRide));
             }
 
             decimal fare;
 
-            switch (vehicle)
+            switch (uberRide)
             {
                 case UberX uberX:
                     fare = CalculateUberXFare(uberX, distance);
@@ -46,7 +46,7 @@ namespace FareCalculator.Core.Services
                     break;
 
                 default:
-                    throw new ArgumentException("Not a known vehicle type", nameof(vehicle));
+                    throw new ArgumentException("Not a known vehicle type", nameof(uberRide));
             }
 
             return fare;

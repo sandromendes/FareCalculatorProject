@@ -121,7 +121,6 @@
     </Compile>
     <Compile Include="Converters\StringToDecimalConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\FareCalculatorPageViewModel.cs" />
     <Compile Include="Views\FareCalculatorPage.xaml.cs">
       <DependentUpon>FareCalculatorPage.xaml</DependentUpon>
     </Compile>
@@ -162,6 +161,10 @@
     <ProjectReference Include="..\FareCalculator.Core\FareCalculator.Core.csproj">
       <Project>{6092BC98-F35F-474C-9D26-28372DFD8103}</Project>
       <Name>FareCalculator.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FareCalculator.ViewModels\FareCalculator.ViewModels.csproj">
+      <Project>{5fa084b4-fe65-40cf-96cb-d38cd9f8bdd0}</Project>
+      <Name>FareCalculator.ViewModels</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -10,7 +10,7 @@ namespace FareCalculator.Core.Services
         {
         }
 
-        public decimal CalculateFare(Vehicle vehicle, int distance, decimal weight = 0, decimal dimension = 0)
+        public decimal CalculateFare(UberRideBase vehicle, int distance, decimal weight = 0, decimal dimension = 0)
         {
             if (vehicle == null)
             {

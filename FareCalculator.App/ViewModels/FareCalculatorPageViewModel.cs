@@ -187,7 +187,7 @@ namespace FareCalculator.App.ViewModels
             DistanceResult = string.Empty;
         }
 
-        private Vehicle CreateVehicle(UberType type)
+        private UberRideBase CreateVehicle(UberType type)
         {
             switch (type)
             {

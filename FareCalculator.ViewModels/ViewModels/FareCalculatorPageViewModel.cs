@@ -1,16 +1,17 @@
-﻿using FareCalculator.Core.Models;
-using System;
-using System.Windows.Input;
-using Prism.Commands;
+﻿using FareCalculator.Core.Common;
 using FareCalculator.Core.Enums;
+using FareCalculator.Core.Models;
 using FareCalculator.Core.Services.Interfaces;
+using Prism.Commands;
+using Prism.Windows.Mvvm;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Prism.Windows.Mvvm;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
 
-namespace FareCalculator.App.ViewModels
+namespace FareCalculator.ViewModels.ViewModels
 {
     public class FareCalculatorPageViewModel : ViewModelBase
     {
@@ -29,16 +30,29 @@ namespace FareCalculator.App.ViewModels
             LoadUberOptions();
             LoadCityOptions();
 
-            SelectedUberOption = UberType.UBER_X.ToString();
-            SelectedOrigin = CityTypes.RECIFE.ToString();
-            SelectedDestination = CityTypes.OLINDA.ToString();
+            SelectedUberOption = UberType.UBER_X.GetDescription();
+            SelectedOrigin = CityTypes.RECIFE.GetDescription();
+            SelectedDestination = CityTypes.OLINDA.GetDescription();
 
             CalculateFareCommand = new DelegateCommand(ExecuteCalculateFare);
             ClearCommand = new DelegateCommand(ExecuteClear);
         }
 
-        public void LoadUberOptions() => UberOptions = Enum.GetNames(typeof(UberType)).ToList();
-        public void LoadCityOptions() => CityOptions = Enum.GetNames(typeof(CityTypes)).ToList();
+        public void LoadUberOptions()
+        {
+            UberOptions = Enum.GetValues(typeof(UberType))
+                              .Cast<UberType>()
+                              .Select(uberType => uberType.GetDescription())
+                              .ToList();
+        }
+
+        public void LoadCityOptions()
+        {
+            CityOptions = Enum.GetValues(typeof(CityTypes))
+                              .Cast<CityTypes>()
+                              .Select(uberType => uberType.GetDescription())
+                              .ToList();
+        }
 
         public List<string> UberOptions { get; set; }
 
@@ -53,9 +67,9 @@ namespace FareCalculator.App.ViewModels
                 RaisePropertyChanged(nameof(IsPassengerTypeVisible));
             }
         }
-        
+
         public List<string> CityOptions { get; set; }
-        
+
         private string _selectedOrigin;
         public string SelectedOrigin
         {
@@ -110,25 +124,23 @@ namespace FareCalculator.App.ViewModels
         public string FareResult
         {
             get => _fareResult;
-            private set => SetProperty(ref _fareResult, value);
+            set => SetProperty(ref _fareResult, value);
         }
 
         private string _distanceResult;
         public string DistanceResult
         {
             get => _distanceResult;
-            private set => SetProperty(ref _distanceResult, value);
+            set => SetProperty(ref _distanceResult, value);
         }
 
         public bool IsDeliveryTypeVisible
         {
             get
             {
-                if (Enum.TryParse(SelectedUberOption, out UberType selectedType))
-                {
-                    return selectedType == UberType.UBER_FLASH || selectedType == UberType.UBER_FLASH_MOTO;
-                }
-                return false;
+                var selectedType = EnumExtensions.GetValueFromDescription<UberType>(SelectedUberOption);
+
+                return selectedType == UberType.UBER_FLASH || selectedType == UberType.UBER_FLASH_MOTO;
             }
         }
 
@@ -136,16 +148,14 @@ namespace FareCalculator.App.ViewModels
         {
             get
             {
-                if (Enum.TryParse(SelectedUberOption, out UberType selectedType))
-                {
-                    return selectedType == UberType.UBER_X || selectedType == UberType.UBER_VIP ||
-                           selectedType == UberType.UBER_BLACK || selectedType == UberType.UBER_MOTO;
-                }
-                return false;
+                var selectedType = EnumExtensions.GetValueFromDescription<UberType>(SelectedUberOption);
+
+                return selectedType == UberType.UBER_X || selectedType == UberType.UBER_VIP ||
+                       selectedType == UberType.UBER_BLACK || selectedType == UberType.UBER_MOTO;
             }
         }
 
-        private async void ExecuteCalculateFare()
+        public async void ExecuteCalculateFare()
         {
             try
             {
@@ -155,15 +165,15 @@ namespace FareCalculator.App.ViewModels
                     return;
                 }
 
-                Enum.TryParse(SelectedOrigin, out CityTypes selectedOrigin);
-                Enum.TryParse(SelectedDestination, out CityTypes selectedDestination);
+                var selectedOrigin = EnumExtensions.GetValueFromDescription<CityTypes>(SelectedOrigin);
+                var selectedDestination = EnumExtensions.GetValueFromDescription<CityTypes>(SelectedDestination);
 
                 Distance = await _distanceCalculatorService.CalculateDistanceAsync(selectedOrigin, selectedDestination);
 
-                Enum.TryParse(SelectedUberOption, out UberType selectedType);
+                var selectedType = EnumExtensions.GetValueFromDescription<UberType>(SelectedUberOption);
 
                 var fare = _fareCalculatorService
-                    .CalculateFare(CreateVehicle(selectedType), Distance, Weight, Height * Width * Length); 
+                    .CalculateFare(CreateVehicle(selectedType), Distance, Weight, Height * Width * Length);
 
                 FareResult = $"Calculated Fare: {fare:C}";
                 DistanceResult = $"Calculated Distance: {Distance} km";
@@ -176,9 +186,9 @@ namespace FareCalculator.App.ViewModels
 
         private void ExecuteClear()
         {
-            SelectedUberOption = UberType.UBER_X.ToString();
-            SelectedOrigin = CityTypes.RECIFE.ToString();
-            SelectedDestination = CityTypes.OLINDA.ToString();
+            SelectedUberOption = UberType.UBER_X.GetDescription();
+            SelectedOrigin = CityTypes.RECIFE.GetDescription();
+            SelectedDestination = CityTypes.OLINDA.GetDescription();
             Weight = 0;
             Height = 0;
             Width = 0;
@@ -187,7 +197,7 @@ namespace FareCalculator.App.ViewModels
             DistanceResult = string.Empty;
         }
 
-        private Vehicle CreateVehicle(UberType type)
+        private UberRideBase CreateVehicle(UberType type)
         {
             switch (type)
             {
@@ -200,9 +210,9 @@ namespace FareCalculator.App.ViewModels
                 case UberType.UBER_MOTO:
                     return new UberMoto();
                 case UberType.UBER_FLASH:
-                    return new UberFlashMoto { Weight = Weight };
-                case UberType.UBER_FLASH_MOTO:
                     return new UberFlash { Dimension = Height * Width * Length };
+                case UberType.UBER_FLASH_MOTO:
+                    return new UberFlashMoto { Weight = Weight };
                 default:
                     throw new ArgumentException("Invalid UberType", nameof(type));
             }
@@ -219,6 +229,5 @@ namespace FareCalculator.App.ViewModels
 
             await dialog.ShowAsync();
         }
-
     }
 }

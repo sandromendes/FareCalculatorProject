@@ -5,9 +5,9 @@ namespace FareCalculator.Core.Services.FareCalculators
 {
     public class UberXFareCalculatorStrategy : IFareCalculatorStrategy
     {
-        public decimal CalculateFare(Vehicle vehicle, int distance, decimal weight = 0, decimal dimension = 0)
+        public decimal CalculateFare(UberRideBase uberRide, int distance, decimal weight = 0, decimal dimension = 0)
         {
-            var uberX = vehicle as UberX;
+            var uberX = uberRide as UberX;
             decimal fare = uberX.BaseFare + uberX.RatePerKm * distance;
 
             if (uberX.Passengers == 1)

@@ -25,16 +25,16 @@ namespace FareCalculator.Core.Services
             };
         }
 
-        public decimal CalculateFare(Vehicle vehicle, int distance, decimal weight = 0, decimal dimension = 0)
+        public decimal CalculateFare(UberRideBase uberRide, int distance, decimal weight = 0, decimal dimension = 0)
         {
-            if (vehicle == null)
+            if (uberRide == null)
             {
-                throw new ArgumentNullException(nameof(vehicle));
+                throw new ArgumentNullException(nameof(uberRide));
             }
 
-            if (_strategies.TryGetValue(vehicle.GetType(), out var strategy))
+            if (_strategies.TryGetValue(uberRide.GetType(), out var strategy))
             {
-                return strategy.CalculateFare(vehicle, distance, weight, dimension);
+                return strategy.CalculateFare(uberRide, distance, weight, dimension);
             }
 
             throw new ArgumentException("Invalid vehicle type.");

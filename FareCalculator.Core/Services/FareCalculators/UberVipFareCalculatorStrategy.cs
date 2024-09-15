@@ -5,9 +5,9 @@ namespace FareCalculator.Core.Services.FareCalculators
 {
     public class UberVipFareCalculatorStrategy : IFareCalculatorStrategy
     {
-        public decimal CalculateFare(Vehicle vehicle, int distance, decimal weight = 0, decimal dimension = 0)
+        public decimal CalculateFare(UberRideBase uberRide, int distance, decimal weight = 0, decimal dimension = 0)
         {
-            var uberVIP = (UberVip)vehicle;
+            var uberVIP = (UberVip)uberRide;
             var fare = uberVIP.BaseFare + uberVIP.RatePerKm * distance;
 
             if (uberVIP.Passengers == 1)

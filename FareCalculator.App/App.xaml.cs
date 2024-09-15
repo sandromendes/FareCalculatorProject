@@ -1,5 +1,8 @@
-﻿using FareCalculator.Core.Services;
+﻿using FareCalculator.App.Views;
+using FareCalculator.Core.Services;
 using FareCalculator.Core.Services.Interfaces;
+using FareCalculator.ViewModels.ViewModels;
+using Prism.Mvvm;
 using Prism.Unity.Windows;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
@@ -11,6 +14,15 @@ namespace FareCalculator.App
         public App()
         {
             this.InitializeComponent();
+
+        }
+
+        protected override void ConfigureViewModelLocator()
+        {
+            base.ConfigureViewModelLocator();
+
+            ViewModelLocationProvider.Register(typeof(FareCalculatorPage).ToString(), 
+                typeof(FareCalculatorPageViewModel));
         }
 
         protected override Task OnLaunchApplicationAsync(LaunchActivatedEventArgs args)

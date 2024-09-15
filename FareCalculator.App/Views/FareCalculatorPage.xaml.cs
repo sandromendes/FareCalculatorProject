@@ -1,4 +1,4 @@
-﻿using FareCalculator.App.ViewModels;
+﻿using FareCalculator.ViewModels.ViewModels;
 using System.Linq;
 using Windows.UI.Xaml.Controls;
 

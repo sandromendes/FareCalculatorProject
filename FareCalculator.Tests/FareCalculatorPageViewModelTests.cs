@@ -96,7 +96,7 @@ namespace FareCalculator.Tests
             _viewModel.ExecuteCalculateFare();
 
             // Assert
-            Assert.AreEqual("Calculated Fare: R$ 12,00", _viewModel.FareResult);
+            Assert.AreEqual("Calculated Fare: R$ 20,00", _viewModel.FareResult);
             Assert.AreEqual("Calculated Distance: 8 km", _viewModel.DistanceResult);
         }
 

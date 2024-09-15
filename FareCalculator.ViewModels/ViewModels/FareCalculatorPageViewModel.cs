@@ -210,9 +210,9 @@ namespace FareCalculator.ViewModels.ViewModels
                 case UberType.UBER_MOTO:
                     return new UberMoto();
                 case UberType.UBER_FLASH:
-                    return new UberFlashMoto { Weight = Weight };
-                case UberType.UBER_FLASH_MOTO:
                     return new UberFlash { Dimension = Height * Width * Length };
+                case UberType.UBER_FLASH_MOTO:
+                    return new UberFlashMoto { Weight = Weight };
                 default:
                     throw new ArgumentException("Invalid UberType", nameof(type));
             }

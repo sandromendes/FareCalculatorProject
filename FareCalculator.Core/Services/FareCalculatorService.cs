@@ -17,7 +17,7 @@ namespace FareCalculator.Core.Services
                 throw new ArgumentNullException(nameof(uberRide));
             }
 
-            return uberRide.CalculateFare(distance);
+            return uberRide.CalculateFare(distance, weight, dimension);
         }
     }
 }

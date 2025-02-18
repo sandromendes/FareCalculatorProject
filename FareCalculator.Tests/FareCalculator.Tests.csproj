@@ -119,6 +119,7 @@
     <SDKReference Include="TestPlatform.Universal, Version=$(UnitTestPlatformVersion)" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FareCalculatorDomainTests.cs" />
     <Compile Include="FareCalculatorPageViewModelTests.cs" />
     <Compile Include="FareCalculatorServiceTests.cs" />
     <Compile Include="Mocks\DistanceCalculatorServiceMock.cs" />
